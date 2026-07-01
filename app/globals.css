@@ -1,0 +1,718 @@
+:root {
+  --bg: #0b1120;
+  --bg-elev: #111c34;
+  --bg-card: #16223d;
+  --bg-card-hover: #1b294a;
+  --border: #243456;
+  --text: #e7ecf6;
+  --text-dim: #9aa9c9;
+  --text-faint: #6b7ba0;
+  --accent: #6ea8fe;
+  --accent-strong: #3b82f6;
+  --good: #34d399;
+  --good-dim: #1f6f54;
+  --star: #fbbf24;
+  --worn: #f59e0b;
+  --worn-dim: #6b4a16;
+  --bag: #38bdf8;
+  --bag-dim: #1f4a63;
+
+  /* Per-phase accent colours */
+  --las-vegas: #f472b6;
+  --china: #f87171;
+
+  --radius: 14px;
+  --shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.55);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: radial-gradient(
+      1200px 600px at 50% -200px,
+      #16233f 0%,
+      transparent 60%
+    ),
+    var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+.wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 28px 20px 96px;
+}
+
+/* ---------- Header ---------- */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  margin: -28px -20px 24px;
+  padding: 22px 20px 18px;
+  background: rgba(11, 17, 32, 0.82);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.subtitle {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin: 4px 0 16px;
+}
+
+.overall {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.overall .bar {
+  flex: 1;
+}
+
+.overall .count {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.reset-btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.reset-btn:hover {
+  background: var(--bg-card);
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.add-top-btn {
+  appearance: none;
+  background: var(--accent-strong);
+  border: 1px solid var(--accent-strong);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.add-top-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ---------- Legend ---------- */
+.legend {
+  display: flex;
+  gap: 16px;
+  margin: 12px 0 0;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  color: var(--text-faint);
+}
+
+.legend-swatch {
+  width: 11px;
+  height: 11px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.legend-swatch.packed {
+  background: var(--good);
+}
+
+.legend-swatch.worn {
+  background: var(--worn);
+}
+
+/* ---------- Progress bar ---------- */
+.bar {
+  height: 8px;
+  background: var(--bg-elev);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.bar > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--good));
+  border-radius: 999px;
+  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- Phase ---------- */
+.phase {
+  margin-bottom: 30px;
+}
+
+.phase-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.phase-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+  align-self: center;
+}
+
+.phase-title {
+  font-size: 1.12rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.phase-count {
+  margin-left: auto;
+  font-size: 0.82rem;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.phase-subtitle {
+  color: var(--text-faint);
+  font-size: 0.82rem;
+  margin: 0 0 14px 20px;
+}
+
+/* ---------- Section ---------- */
+.section {
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  font-weight: 700;
+  margin: 0 0 8px 2px;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.add-section-btn {
+  appearance: none;
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-faint);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.add-section-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--bg-card);
+}
+
+/* ---------- Item row ---------- */
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px 16px;
+  user-select: none;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.12s ease, box-shadow 0.12s ease;
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.item:hover {
+  background: var(--bg-card-hover);
+}
+
+/* Worn (not packed) gets an amber left accent so it reads as "handled, but on me". */
+.item.is-worn {
+  box-shadow: inset 3px 0 0 var(--worn);
+}
+
+/* Stowed in a bag gets a left accent in that bag's colour (set inline). */
+.item.is-bagged {
+  box-shadow: inset 3px 0 0 var(--row-accent, var(--bag));
+}
+
+.item.is-worn.is-bagged {
+  box-shadow: inset 3px 0 0 var(--worn), inset 6px 0 0 var(--row-accent, var(--bag));
+}
+
+.drag-handle {
+  flex: none;
+  align-self: center;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 26px;
+  margin-left: -4px;
+  cursor: grab;
+  color: var(--text-faint);
+  opacity: 0.55;
+  transition: opacity 0.15s ease, color 0.15s ease;
+  touch-action: none;
+}
+
+.drag-handle:hover {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.drag-handle .grip {
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.item.dragging {
+  opacity: 0.4;
+}
+
+.item.drag-over {
+  background: rgba(110, 168, 254, 0.12);
+  box-shadow: inset 0 2px 0 var(--accent);
+}
+
+.checkbox-btn {
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-top: 1px;
+  cursor: pointer;
+  flex: none;
+}
+
+.checkbox {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  border: 2px solid var(--text-faint);
+  display: grid;
+  place-items: center;
+  transition: all 0.15s ease;
+  background: transparent;
+}
+
+.item.is-done .checkbox {
+  background: var(--good);
+  border-color: var(--good);
+}
+
+.checkbox svg {
+  width: 14px;
+  height: 14px;
+  stroke: #07140f;
+  stroke-width: 3.5;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: all 0.15s ease;
+}
+
+.item.is-done .checkbox svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.item-body {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.item-text {
+  font-size: 0.96rem;
+  color: var(--text);
+  transition: color 0.15s ease;
+}
+
+.item.is-done .item-text {
+  color: var(--text-faint);
+  text-decoration: line-through;
+  text-decoration-color: var(--text-faint);
+}
+
+.item-note {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.star {
+  color: var(--star);
+  margin-left: 6px;
+  font-size: 0.85rem;
+}
+
+/* ---------- Worn toggle ---------- */
+.worn-btn {
+  flex: none;
+  align-self: center;
+  appearance: none;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-faint);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.worn-btn:hover {
+  border-color: var(--worn);
+  color: var(--worn);
+}
+
+.worn-btn.is-worn {
+  background: var(--worn);
+  border-color: var(--worn);
+  color: #2a1c05;
+}
+
+/* Right-hand controls (Wear toggle + bag selector). */
+.item-controls {
+  flex: none;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* ---------- Bag ---------- */
+.bag-badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  vertical-align: 1px;
+  /* colour + background set inline per bag */
+}
+
+.bag-select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 5px 22px 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%236b7ba0' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>")
+    no-repeat right 8px center;
+  color: var(--text-faint);
+  transition: all 0.15s ease;
+  max-width: 130px;
+}
+
+.bag-select:hover {
+  border-color: var(--bag);
+  color: var(--bag);
+}
+
+.bag-select.has-bag {
+  border-color: var(--bag);
+  color: #cdeefb;
+  background-color: var(--bag-dim);
+}
+
+.bag-select option {
+  background: var(--bg-card);
+  color: var(--text);
+}
+
+/* ---------- Edit ---------- */
+.edit-btn {
+  appearance: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 28px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-faint);
+  transition: all 0.15s ease;
+}
+
+.edit-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.edit-btn .pencil {
+  width: 15px;
+  height: 15px;
+}
+
+.delete-btn {
+  appearance: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 28px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-faint);
+  transition: all 0.15s ease;
+}
+
+.delete-btn:hover {
+  border-color: #f87171;
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.08);
+}
+
+.delete-btn .trash {
+  width: 15px;
+  height: 15px;
+}
+
+.item.is-editing {
+  background: var(--bg-card-hover);
+}
+
+.item-edit {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.edit-input,
+.edit-notes-input {
+  flex: 1;
+  min-width: 180px;
+  font: inherit;
+  font-size: 0.94rem;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--accent);
+  border-radius: 9px;
+  padding: 8px 11px;
+  outline: none;
+}
+
+.edit-notes-input {
+  font-size: 0.84rem;
+  border-color: var(--border);
+  color: var(--text-dim);
+  min-width: 140px;
+}
+
+.edit-input:focus,
+.edit-notes-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(110, 168, 254, 0.18);
+}
+
+.edit-actions {
+  display: flex;
+  gap: 6px;
+  flex: none;
+}
+
+.edit-save,
+.edit-cancel {
+  appearance: none;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  transition: all 0.15s ease;
+}
+
+.edit-save {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: #fff;
+}
+
+.edit-save:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.edit-cancel {
+  background: transparent;
+  color: var(--text-dim);
+}
+
+.edit-cancel:hover {
+  color: var(--text);
+  border-color: var(--text-faint);
+}
+
+.pending-saving {
+  opacity: 0.55;
+}
+
+/* ---------- States ---------- */
+.loading,
+.error {
+  text-align: center;
+  color: var(--text-dim);
+  padding: 60px 20px;
+}
+
+.error {
+  color: #fca5a5;
+}
+
+.celebrate {
+  text-align: center;
+  background: linear-gradient(180deg, var(--good-dim), transparent);
+  border: 1px solid var(--good-dim);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 24px;
+  font-weight: 600;
+  color: #d1fae5;
+}
+
+.sync-hint {
+  text-align: center;
+  color: var(--text-faint);
+  font-size: 0.78rem;
+  margin-top: 28px;
+}
+
+/* ---------- Undo toast ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px 12px 18px;
+  border-radius: 12px;
+  background: #f1f5fb;
+  color: #0b1120;
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.6);
+  font-size: 0.88rem;
+  font-weight: 600;
+  max-width: calc(100vw - 32px);
+  animation: toast-in 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.toast-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toast-undo {
+  appearance: none;
+  flex: none;
+  cursor: pointer;
+  background: var(--accent-strong);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 7px 16px;
+  border-radius: 999px;
+  transition: background 0.15s ease;
+}
+
+.toast-undo:hover {
+  background: var(--accent);
+}

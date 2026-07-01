@@ -1,0 +1,28 @@
+{
+  "name": "china-trip-packing-2026",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Las Vegas + China trip carry-items packing checklist with local SQLite sync",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "reseed": "node scripts/reseed.mjs",
+    "sync:db": "node scripts/autosync-db.mjs"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.14.0",
+    "next": "^15.1.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^22.10.7",
+    "@types/react": "^19.0.7",
+    "@types/react-dom": "^19.0.3",
+    "better-sqlite3": "^11.8.1",
+    "typescript": "^5.7.3"
+  }
+}
