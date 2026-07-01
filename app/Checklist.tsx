@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 
 export type ClientItem = {
   id: number;
@@ -187,6 +187,18 @@ function Grip() {
   );
 }
 
+function Chevron() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="chevron">
+      <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+// Stable key for a section's collapsed state (section names repeat across phases).
+const sectionKey = (phaseKey: string, section: string) => `${phaseKey}::${section}`;
+const COLLAPSE_STORAGE_KEY = "china-packing-collapsed-sections";
+
 export default function Checklist({
   initialItems,
   title,
@@ -210,11 +222,57 @@ export default function Checklist({
   } | null>(null);
   const [dragId, setDragId] = useState<number | null>(null);
   const [dragOverId, setDragOverId] = useState<number | null>(null);
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const [hydrated, setHydrated] = useState(false);
+
+  // Load collapsed-section state from localStorage after mount (SSR-safe).
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(COLLAPSE_STORAGE_KEY);
+      if (raw) setCollapsed(new Set(JSON.parse(raw) as string[]));
+    } catch {
+      /* ignore malformed / unavailable storage */
+    }
+    setHydrated(true);
+  }, []);
+
+  // Persist collapsed-section state whenever it changes (after first hydration).
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      localStorage.setItem(COLLAPSE_STORAGE_KEY, JSON.stringify([...collapsed]));
+    } catch {
+      /* ignore quota / unavailable storage */
+    }
+  }, [collapsed, hydrated]);
 
   const grouped = useMemo(() => group(items), [items]);
   const total = items.length;
   const handledCount = items.filter(isHandled).length;
   const allDone = total > 0 && handledCount === total;
+
+  const allSectionKeys = useMemo(
+    () =>
+      grouped.flatMap((p) =>
+        p.sections.map((s) => sectionKey(p.phaseKey, s.section))
+      ),
+    [grouped]
+  );
+  const allCollapsed =
+    allSectionKeys.length > 0 && allSectionKeys.every((k) => collapsed.has(k));
+
+  function toggleSection(key: string) {
+    setCollapsed((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  }
+
+  function toggleAllSections() {
+    setCollapsed(allCollapsed ? new Set() : new Set(allSectionKeys));
+  }
 
   // Optimistically apply a flag change, PATCH it, and roll back on failure.
   async function patchItem(
@@ -470,6 +528,14 @@ export default function Checklist({
           >
             + Add item
           </button>
+          <button
+            className="collapse-all-btn"
+            onClick={toggleAllSections}
+            type="button"
+            title={allCollapsed ? "Expand all sections" : "Collapse all sections"}
+          >
+            {allCollapsed ? "Expand all" : "Collapse all"}
+          </button>
           <button className="reset-btn" onClick={resetAll} type="button">
             Reset
           </button>
@@ -505,9 +571,31 @@ export default function Checklist({
           </div>
           <p className="phase-subtitle">{phase.phaseSubtitle}</p>
 
-          {phase.sections.map((section) => (
-            <div className="section" key={section.section}>
-              <h3 className="section-title">{section.section}</h3>
+          {phase.sections.map((section) => {
+            const secKey = sectionKey(phase.phaseKey, section.section);
+            const isCollapsed = collapsed.has(secKey);
+            const secTotal = section.items.length;
+            const secHandled = section.items.filter(isHandled).length;
+            return (
+            <div
+              className={"section" + (isCollapsed ? " is-collapsed" : "")}
+              key={section.section}
+            >
+              <button
+                type="button"
+                className="section-title"
+                onClick={() => toggleSection(secKey)}
+                aria-expanded={!isCollapsed}
+                title={isCollapsed ? "Show items" : "Hide items"}
+              >
+                <Chevron />
+                <span className="section-name">{section.section}</span>
+                <span className="section-count">
+                  {secHandled}/{secTotal}
+                </span>
+              </button>
+              {!isCollapsed && (
+              <>
               <div className="card">
                 {section.items.map((it) => {
                   const editing = editingId === it.id;
@@ -714,8 +802,11 @@ export default function Checklist({
               >
                 + Add item
               </button>
+              </>
+              )}
             </div>
-          ))}
+            );
+          })}
         </section>
       ))}
 

@@ -99,7 +99,8 @@ body {
   white-space: nowrap;
 }
 
-.reset-btn {
+.reset-btn,
+.collapse-all-btn {
   appearance: none;
   background: transparent;
   border: 1px solid var(--border);
@@ -113,7 +114,8 @@ body {
   white-space: nowrap;
 }
 
-.reset-btn:hover {
+.reset-btn:hover,
+.collapse-all-btn:hover {
   background: var(--bg-card);
   color: var(--text);
   border-color: var(--accent);
@@ -231,12 +233,55 @@ body {
 }
 
 .section-title {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin: 0 0 8px 2px;
+  padding: 4px 4px 4px 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
   font-size: 0.74rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--text-faint);
   font-weight: 700;
-  margin: 0 0 8px 2px;
+  text-align: left;
+  transition: color 0.15s ease;
+}
+
+.section-title:hover {
+  color: var(--text-dim);
+}
+
+.section-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.section-title .section-count {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  color: var(--text-faint);
+  opacity: 0.85;
+}
+
+.section-title .chevron {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  transform: rotate(90deg); /* points down when the section is open */
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.section.is-collapsed .section-title .chevron {
+  transform: rotate(0deg); /* points right when collapsed */
+}
+
+.section.is-collapsed {
+  margin-bottom: 10px;
 }
 
 .card {
